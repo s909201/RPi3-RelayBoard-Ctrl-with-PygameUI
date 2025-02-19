@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>GPIO 控制面板</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    .container {
+      width: 800px;
+      height: 480px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 20px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 10px;
+      background-color: #e0e0e0;
+      box-shadow: 5px 5px 10px #bebebe, -5px -5px 10px #ffffff;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    button.active {
+      box-shadow: inset 5px 5px 10px #bebebe, inset -5px -5px 10px #ffffff;
+      transform: translateY(2px);
+      background-color: #a0ffa0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <button id="btn-0" onclick="toggleGPIO(0)">按鈕 1</button>
+    <button id="btn-1" onclick="toggleGPIO(1)">按鈕 2</button>
+    <button id="btn-2" onclick="toggleGPIO(2)">按鈕 3</button>
+    <button id="btn-3" onclick="toggleGPIO(3)">按鈕 4</button>
+    <button id="btn-4" onclick="toggleGPIO(4)">按鈕 5</button>
+    <button id="btn-5" onclick="toggleGPIO(5)">按鈕 6</button>
+    <button id="btn-6" onclick="toggleGPIO(6)">按鈕 7</button>
+    <button id="btn-7" onclick="toggleGPIO(7)">按鈕 8</button>
+  </div>
+
+  <script>
+    function toggleGPIO(channel) {
+      fetch(`/toggle/${channel}`, { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+          const button = document.getElementById(`btn-${data.channel}`);
+          if (data.status === "ON") {
+            button.classList.add("active");
+          } else {
+            button.classList.remove("active");
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+  </script>
+</body>
+
+</html>
